@@ -3,8 +3,10 @@ package guru.springframework.springmvcrest.api.v1.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class CategoryDTO {
-    private String name;
-    private Long id;
+@AllArgsConstructor
+public class CategoryListDTO {
+    List<CategoryDTO> categories;
 }
