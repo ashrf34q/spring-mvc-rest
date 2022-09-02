@@ -1,5 +1,6 @@
 package guru.springframework.springmvcrest.services;
 
+import guru.springframework.springmvcrest.api.v1.mapper.CategoryMapper;
 import guru.springframework.springmvcrest.api.v1.model.CategoryDTO;
 import guru.springframework.springmvcrest.domain.Category;
 import guru.springframework.springmvcrest.repositories.CategoryRepository;
@@ -25,7 +26,9 @@ class CategoryServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this.getClass());
+        MockitoAnnotations.openMocks(this);
+
+        categoryService = new CategoryServiceImpl(CategoryMapper.INSTANCE, categoryRepository);
     }
     @Test
     void getAllCategories() {
