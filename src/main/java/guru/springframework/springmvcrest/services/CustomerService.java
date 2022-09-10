@@ -8,4 +8,6 @@ public interface CustomerService {
     public List<CustomerDTO> getAllCustomers();
 
     public CustomerDTO getCustomerById(Long id);
+
+    public CustomerDTO createCustomer(CustomerDTO customerDTO);
 }
