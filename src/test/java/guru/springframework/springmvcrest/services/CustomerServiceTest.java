@@ -16,7 +16,7 @@ import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CustomerServiceTest {
 
@@ -126,6 +126,13 @@ class CustomerServiceTest {
         assertEquals(NAME, savedDTO.getFirstName());
         assertEquals(LAST_NAME, savedDTO.getLastName());
         assertEquals(URL, savedDTO.getURL());
+    }
+
+    @Test
+    void deleteCustomerById() {
+        customerService.deleteCustomerById(ID);
+
+        verify(customerRepository, times(1)).deleteById(anyLong());
     }
 
 }
