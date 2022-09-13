@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 class CustomerServiceTest {
 
-    public static final long ID = 1L;
+    public static final Long ID = 1L;
     public static final String URL = "/shop/customers/";
     public static final String NAME = "Saul";
     public static final String LAST_NAME = "Goodman";
@@ -51,17 +51,18 @@ class CustomerServiceTest {
     void getCustomerById() {
         Customer customer = new Customer();
         customer.setId(ID);
-        customer.setFirstName("Gabby");
+        customer.setFirstName(NAME);
+
         when(customerRepository.findCustomerById(anyLong())).thenReturn(customer);
 
         CustomerDTO customerDTO = customerService.getCustomerById(ID);
 
-        assertEquals(customer.getFirstName(), customerDTO.getFirstName());
+        assertEquals(NAME, customerDTO.getFirstName());
         assertEquals(ID, customerDTO.getId());
     }
 
     @Test
-    void createCustomerTest(){
+    void createCustomerTest() {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstName(NAME);
         customerDTO.setLastName(LAST_NAME);
@@ -78,7 +79,27 @@ class CustomerServiceTest {
         assertEquals(NAME, savedDTO.getFirstName());
         assertEquals(LAST_NAME, savedDTO.getLastName());
         assertEquals("/shop/customers/1", savedDTO.getURL());
+    }
 
+    @Test
+    void updateCustomerTest() {
+    //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName(NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstName(customerDTO.getFirstName());
+        savedCustomer.setLastName(customerDTO.getLastName());
+        savedCustomer.setId(ID);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        CustomerDTO savedDTO = customerService.updateCustomer(ID, customerDTO);
+
+        assertEquals(NAME, savedDTO.getFirstName());
+        assertEquals(LAST_NAME, savedDTO.getLastName());
+        assertEquals("/shop/customers/1", savedDTO.getURL());
     }
 
 }

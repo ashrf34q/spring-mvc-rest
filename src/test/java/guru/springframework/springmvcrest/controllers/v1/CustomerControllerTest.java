@@ -2,6 +2,7 @@ package guru.springframework.springmvcrest.controllers.v1;
 
 
 import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
+import guru.springframework.springmvcrest.domain.Customer;
 import guru.springframework.springmvcrest.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static guru.springframework.springmvcrest.controllers.v1.AbstractRestController.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,12 +55,10 @@ class CustomerControllerTest {
         customer1.setId(ID);
         customer1.setFirstName("Michele");
         customer1.setLastName("Weston");
-        customer1.setURL("/shop/customer/1");
 
         CustomerDTO customer2 = new CustomerDTO();
         customer2.setFirstName("Sam");
         customer2.setLastName("Axe");
-        customer2.setURL("/shop/customer/2");
         List<CustomerDTO> customers = Arrays.asList(customer1, customer2);
 
         when(customerService.getAllCustomers()).thenReturn(customers);
@@ -76,8 +75,8 @@ class CustomerControllerTest {
     void testListCustomerById() throws Exception {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(ID);
-        customerDTO.setFirstName("Ashraf");
-        customerDTO.setLastName("Makki");
+        customerDTO.setFirstName(NAME);
+        customerDTO.setLastName(LAST_NAME);
         customerDTO.setURL("/shop/customer/1");
         
         when(customerService.getCustomerById(anyLong())).thenReturn(customerDTO);
@@ -85,11 +84,11 @@ class CustomerControllerTest {
         mockMvc.perform(get("/api/v1/customers/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", equalTo("Ashraf")));
+                .andExpect(jsonPath("$.firstName", equalTo(NAME)));
     }
 
     @Test
-    public void createNewCustomerTest() throws Exception {
+     void createNewCustomerTest() throws Exception {
         //given
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstName(NAME);
@@ -107,6 +106,29 @@ class CustomerControllerTest {
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo(NAME)))
+                .andExpect(jsonPath("$.URL", equalTo("/shop/customers/1")));
+    }
+
+    @Test
+    void updateCustomerTest() throws Exception {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName(NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstName(NAME);
+        returnDTO.setLastName(LAST_NAME);
+        returnDTO.setURL("/shop/customers/1");
+
+        when(customerService.updateCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(put("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.URL", equalTo("/shop/customers/1")));
     }
 
