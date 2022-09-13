@@ -1,6 +1,5 @@
 package guru.springframework.springmvcrest.bootstrap;
 
-import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
 import guru.springframework.springmvcrest.domain.Category;
 import guru.springframework.springmvcrest.domain.Customer;
 import guru.springframework.springmvcrest.repositories.CategoryRepository;

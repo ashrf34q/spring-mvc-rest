@@ -5,11 +5,13 @@ import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
 import java.util.List;
 
 public interface CustomerService {
-    public List<CustomerDTO> getAllCustomers();
+    List<CustomerDTO> getAllCustomers();
 
-    public CustomerDTO getCustomerById(Long id);
+    CustomerDTO getCustomerById(Long id);
 
-    public CustomerDTO createCustomer(CustomerDTO customerDTO);
+    CustomerDTO createCustomer(CustomerDTO customerDTO);
 
     CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO);
+
+    CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO);
 }

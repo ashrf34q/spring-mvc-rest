@@ -103,4 +103,29 @@ class CustomerServiceTest {
         assertEquals(URL, savedDTO.getURL());
     }
 
+    @Test
+    void patchCustomerTest() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName(NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        Customer customer = new Customer();
+        customer.setFirstName("Bjorn");
+        customer.setLastName("Ironside");
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstName(customerDTO.getFirstName());
+        savedCustomer.setLastName(customerDTO.getLastName());
+        customer.setId(ID);
+
+        when(customerRepository.findById(anyLong())).thenReturn(ofNullable(customer));
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        CustomerDTO savedDTO = customerService.patchCustomer(ID, customerDTO);
+
+        assertEquals(NAME, savedDTO.getFirstName());
+        assertEquals(LAST_NAME, savedDTO.getLastName());
+        assertEquals(URL, savedDTO.getURL());
+    }
+
 }

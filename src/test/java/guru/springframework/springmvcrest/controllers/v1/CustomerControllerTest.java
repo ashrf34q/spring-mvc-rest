@@ -2,7 +2,6 @@ package guru.springframework.springmvcrest.controllers.v1;
 
 
 import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
-import guru.springframework.springmvcrest.domain.Customer;
 import guru.springframework.springmvcrest.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,10 @@ class CustomerControllerTest {
     public static final Long ID = 1L;
     public static final String NAME = "Nate";
     public static final String LAST_NAME = "Diaz";
+
+    public static final String EXPECTED_NAME = "Khabib";
+
+    public static final String EXPECTED_LAST = "Nurmagomedov";
     @Mock
     CustomerService customerService;
 
@@ -115,7 +118,6 @@ class CustomerControllerTest {
         customerDTO.setFirstName(NAME);
         customerDTO.setLastName(LAST_NAME);
 
-
         CustomerDTO returnDTO = new CustomerDTO();
         returnDTO.setFirstName(NAME);
         returnDTO.setLastName(LAST_NAME);
@@ -129,6 +131,27 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(NAME)))
                 .andExpect(jsonPath("$.lastName", equalTo(LAST_NAME)))
+                .andExpect(jsonPath("$.URL", equalTo("/shop/customers/1")));
+    }
+    @Test
+    void patchCustomerTest() throws Exception {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName(NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstName(EXPECTED_NAME);
+        returnDTO.setLastName(EXPECTED_LAST);
+        returnDTO.setURL("/shop/customers/1");
+
+        when(customerService.patchCustomer(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(patch("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo(EXPECTED_NAME)))
+                .andExpect(jsonPath("$.lastName", equalTo(EXPECTED_LAST)))
                 .andExpect(jsonPath("$.URL", equalTo("/shop/customers/1")));
     }
 
