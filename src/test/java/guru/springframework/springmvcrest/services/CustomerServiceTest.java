@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Optional.ofNullable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.when;
 class CustomerServiceTest {
 
     public static final Long ID = 1L;
-    public static final String URL = "/shop/customers/";
+    public static final String URL = "/shop/customers/1";
     public static final String NAME = "Saul";
     public static final String LAST_NAME = "Goodman";
     @Mock
@@ -53,7 +54,7 @@ class CustomerServiceTest {
         customer.setId(ID);
         customer.setFirstName(NAME);
 
-        when(customerRepository.findCustomerById(anyLong())).thenReturn(customer);
+        when(customerRepository.findById(anyLong())).thenReturn(ofNullable(customer));
 
         CustomerDTO customerDTO = customerService.getCustomerById(ID);
 
@@ -78,7 +79,7 @@ class CustomerServiceTest {
 
         assertEquals(NAME, savedDTO.getFirstName());
         assertEquals(LAST_NAME, savedDTO.getLastName());
-        assertEquals("/shop/customers/1", savedDTO.getURL());
+        assertEquals(URL, savedDTO.getURL());
     }
 
     @Test
@@ -99,7 +100,7 @@ class CustomerServiceTest {
 
         assertEquals(NAME, savedDTO.getFirstName());
         assertEquals(LAST_NAME, savedDTO.getLastName());
-        assertEquals("/shop/customers/1", savedDTO.getURL());
+        assertEquals(URL, savedDTO.getURL());
     }
 
 }
