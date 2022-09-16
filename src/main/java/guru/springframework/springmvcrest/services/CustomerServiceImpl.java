@@ -2,6 +2,7 @@ package guru.springframework.springmvcrest.services;
 
 import guru.springframework.springmvcrest.api.v1.mapper.CustomerMapper;
 import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
+import guru.springframework.springmvcrest.controllers.v1.CustomerController;
 import guru.springframework.springmvcrest.domain.Customer;
 import guru.springframework.springmvcrest.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService{
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-                    customerDTO.setURL("/shop/customers/" + customer.getId());
+                    customerDTO.setURL(getReturnURL(customer.getId()));
                     return customerDTO;
                 })
                 .collect(Collectors.toList());
@@ -38,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService{
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .map(customerDTO -> {
-                    customerDTO.setURL("/shop/customers/" + id);
+                    customerDTO.setURL(getReturnURL(id));
                     return customerDTO;
                 })
                 .orElseThrow(RuntimeException::new);
@@ -57,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService{
 
         CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
 
-        returnDTO.setURL("/shop/customers/" + savedCustomer.getId());
+        returnDTO.setURL(getReturnURL(savedCustomer.getId()));
 
         return returnDTO;
     }
@@ -83,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService{
 
             CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
 
-            returnDTO.setURL("/shop/customers/" + id);
+            returnDTO.setURL(getReturnURL(id));
 
             return returnDTO;
         })
@@ -100,5 +101,13 @@ public class CustomerServiceImpl implements CustomerService{
             throw new RuntimeException();
         }
     }
+
+
+    //helper method
+    private String getCustomerUrl(Long id) {
+        return CustomerController.BASE_URL + "/" + id;
+    }
+
+    private String getReturnURL(Long id) { return CustomerController.RETURN_URL + id;}
 
 }
