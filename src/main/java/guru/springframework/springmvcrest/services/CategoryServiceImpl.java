@@ -31,8 +31,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO getCategoryByName(String name) {
-        Category category = categoryRepository.findByName(name);
 
-        return categoryMapper.categoryToCategoryDTO(category);
+        if(categoryRepository.findByName(name) != null) {
+            Category category = categoryRepository.findByName(name);
+
+            return categoryMapper.categoryToCategoryDTO(category);
+        }
+        else {
+            throw new ResourceNotFoundException();
+        }
+
     }
 }

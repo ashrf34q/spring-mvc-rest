@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService{
                     customerDTO.setURL(getReturnURL(id));
                     return customerDTO;
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -88,25 +88,25 @@ public class CustomerServiceImpl implements CustomerService{
 
             return returnDTO;
         })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public void deleteCustomerById(Long id) {
 
-        if(id != null) {
+        if(customerRepository.findById(id).isPresent()) {
             customerRepository.deleteById(id);
         }
         else {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException();
         }
     }
 
 
     //helper method
-    private String getCustomerUrl(Long id) {
-        return CustomerController.BASE_URL + "/" + id;
-    }
+//    private String getCustomerUrl(Long id) {
+//        return CustomerController.BASE_URL + "/" + id;
+//    }
 
     private String getReturnURL(Long id) { return CustomerController.RETURN_URL + id;}
 
