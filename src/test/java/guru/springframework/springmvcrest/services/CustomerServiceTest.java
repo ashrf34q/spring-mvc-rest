@@ -129,7 +129,12 @@ class CustomerServiceTest {
     }
 
     @Test
-    void deleteCustomerById() {
+    void deleteCustomerById() throws Exception {
+        Customer customer = new Customer();
+        customer.setId(ID);
+
+        when(customerRepository.findById(anyLong())).thenReturn(ofNullable(customer));
+
         customerService.deleteCustomerById(ID);
 
         verify(customerRepository, times(1)).deleteById(anyLong());
