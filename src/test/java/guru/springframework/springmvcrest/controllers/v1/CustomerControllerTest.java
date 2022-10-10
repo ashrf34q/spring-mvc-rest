@@ -1,6 +1,5 @@
 package guru.springframework.springmvcrest.controllers.v1;
 
-
 import guru.springframework.springmvcrest.api.v1.model.CustomerDTO;
 import guru.springframework.springmvcrest.controllers.RestResponseEntityExceptionHandler;
 import guru.springframework.springmvcrest.services.CustomerService;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -79,7 +77,6 @@ class CustomerControllerTest {
     }
 
 
-    
     @Test
     void testListCustomerById() throws Exception {
         CustomerDTO customerDTO = new CustomerDTO();

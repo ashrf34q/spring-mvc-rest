@@ -101,13 +101,6 @@ public class CustomerServiceImpl implements CustomerService{
             throw new ResourceNotFoundException();
         }
     }
-
-
-    //helper method
-//    private String getCustomerUrl(Long id) {
-//        return CustomerController.BASE_URL + "/" + id;
-//    }
-
     private String getReturnURL(Long id) { return CustomerController.RETURN_URL + id;}
 
 }
